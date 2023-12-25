@@ -6,7 +6,7 @@
                              <!-- 신기한게 생김. v-model.number로 숫자입력받음.  -->
                              <!-- type=number로 해두면 글자입력불가 -->
                             <input type='number' v-model.number="calculation">
-                            <input>
+                            <div>{{ computCal }}</div>
                         <div class="card-body">
                             <div class="table-box mobile">
                                 <table class="table incont table-bordered" id="dataTable" width="100%" cellspacing="0">
@@ -20,7 +20,8 @@
                                         :color="selectedButtonId === course.id ? 'primary' : undefined" 
                                         @click="
                                         selectedButtonId = course.id;
-                                        calculate()"
+                                        calculate();
+                                        sendParent()"
                                         >
                                         {{ course.name }}
                                         </v-btn>
@@ -39,6 +40,7 @@
 
 
 <script>
+import {formatNumber} from 'hangul-util'
 
 export default{
     name : 'WifeMoney',
@@ -54,38 +56,50 @@ export default{
       }
     },
     methods : {
+        sendParent(){
+
+            this.$emit('WifeMoneychildEvent',this.title, this.calculation)
+            this.$store.commit('updateDataFromChild', {'title' : this.title , 'value' :  this.calculation}); // Vuex Store로 데이터 전달 및 상태 업데이트
+
+        }
+        ,
 
         calculate(){
 
             if(this.selectedButtonId === 1){
                 this.calculation += 1000000000;
-                console.log(this.calculation)
+
             }else if(this.selectedButtonId === 2){
 
                 this.calculation += 100000000;
-                console.log(this.calculation)
 
             }else if(this.selectedButtonId ===3){
 
             this.calculation += 10000000;
-            console.log(this.calculation)
 
             }else if(this.selectedButtonId === 4){
 
             this.calculation += 1000000;
-            console.log(this.calculation)
 
             }else if(this.selectedButtonId === 5){
 
             this.calculation = 0 ;
-            console.log(this.calculation)
 
             }
 
             }
 
+
+        },
+    computed : {
+        computCal : function(){
+
+            
+            return formatNumber(this.calculation) +'원'
 
         }
+
+    }
 
     }
 

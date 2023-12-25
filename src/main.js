@@ -3,10 +3,15 @@ import App from './App.vue'
 import router from './router'
 import vuetify from './plugins/vuetify'
 import { loadFonts } from './plugins/webfontloader'
+import Vuex from 'vuex'
+import store from "./store/storage"
+
 
 loadFonts()
 
 createApp(App)
   .use(router)
   .use(vuetify)
+  .use(Vuex)
+  .use(store)
   .mount('#app')
